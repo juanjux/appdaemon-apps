@@ -1,0 +1,45 @@
+global_modules:
+  - remotes
+  - door_sensors
+  - occupancy_sensors
+  - light
+  - lights
+lights:
+  module: lights
+  class: LightsInitializer
+  dependency: light
+goto_sleep:
+  module: goto_sleep
+  class: GotoSleep
+  dependency: lights
+occupancy:
+  module: occupancy
+  class: Occupancy
+  dependency: lights
+  constrain_start_time: sunset - 00:30:00
+  constrain_end_time: sunrise + 00:30:00
+remote_clicked:
+  module: remote_clicked
+  class: RemoteClicked
+  dependency: lights
+nightmode_lamp:
+  module: nightmode_lamp
+  class: NightModeLamp
+alexa_say:
+  module: alexa_say
+  class: AlexaSay
+notification_rain:
+  module: notification_rain
+  class: NotificationRain
+notification_fregadero:
+  module: notification_waterleak
+  class: NotificationWater
+door_alarm:
+  module: door_alarm
+  class: DoorAlarm
+  constrain_input_boolean: input_boolean.door_alarms
+occupancy_alarm:
+  module: occupancy_alarm
+  class: OccupancyAlarm
+  dependency: occupancy
+  constrain_input_boolean: input_boolean.outside_movement_alarm
