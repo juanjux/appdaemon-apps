@@ -1,0 +1,312 @@
+# This file contains the HAS UI elements and other settings
+# used by the apps. Modify to match your installation and rename it
+# to local_config.py
+
+import datetime
+
+# Define here the input_boolean used in HAS to enable holidays mode
+HOLIDAYS_MODE_BOOLEAN = 'input_boolean.holidays_mode'
+
+# List of notifiers, optionally including its data. The notifiers must
+# be correctly defined and configured in HAS
+notifiers = {
+        'telegram_me': {
+                'service': 'notify/telegram_me',
+                },
+        'alexa_kitchen': {
+                'service': 'notify/alexa_media_alexa_kitchen',
+                'data': {'type': 'tts'}
+                },
+        'pushover_emergency': {
+                'service': 'notify/pushover',
+                'data': {
+                    'sound': 'persistent',
+                    'priority': 2,
+                    'retry': 30,
+                    'expire': 10800,
+                    'url': 'https://REPLACE_URL/lovelace'
+                    }
+                }
+        }
+
+
+# Default time for the lights to allow turning on again by occupancy
+# after being turned off manually
+LIGHT_DEFAULT_MANUAL_TURNOFF_TIMEOUT = 10
+
+# lights.py settings
+lights = {
+                # Light definitions
+                'definitions': {
+                        'office': {
+                                # light for light groups, group for normal groups, switch
+                                # etc
+                                'grouping': 'light',
+                                # time in seconds to turn off after no occupancy is detected
+                                # (only when switched on by occupancy). Set to None for
+                                # lights not turned on by occupancy.
+                                'occTurnOff': 120,
+                                # see above
+                                'manualTurnOffTimeout': LIGHT_DEFAULT_MANUAL_TURNOFF_TIMEOUT,
+                                # not implemented, will be the times at which the light
+                                # will turn on and off in holidays mode
+                                'holidayTimes': [],
+                                },
+                        },
+                'outside_stairs': {
+                        'grouping': 'light',
+                        'occTurnOff': 120,
+                        'manualTurnOffTimeout': LIGHT_DEFAULT_MANUAL_TURNOFF_TIMEOUT,
+                        'holidayTimes': [],
+                        },
+                'child': {
+                        'grouping': 'light',
+                        'occTurnOff': None,
+                        'manualTurnOffTimeout': LIGHT_DEFAULT_MANUAL_TURNOFF_TIMEOUT,
+                        'holidayTimes': [],
+                        },
+                }
+
+
+# GotoSleep app settings
+goto_sleep = {
+                # HAS input_boolean that enables the automation
+                'boolean_activate': 'input_boolean.goto_sleep',
+                # When to automatically disable sleeping mode
+                'end_time': datetime.time(6, 0, 0),
+                }
+
+# AlexaSay app settings
+alexa_say = {
+                # HAS text_input whose text will be spoken by the defined Alexa
+                # notifier
+                'text_input': 'input_text.alexa_dice',
+                'notifiers': [notifiers['alexa_kitchen']]
+                }
+
+# Used by alexa_repeat to make alexa repeat something when an input
+# boolean is turned on (like "dinner is ready" or "time to go to sleep").
+alexa_repeat = {
+                # It will use the friendly name of the input_booleans as text to say so you
+                # must define it.
+                'booleans_activate': [
+                        'input_boolean.alexa_lunch_ready',
+                        'input_boolean.alexa_dinner_ready',
+                        'input_boolean.alexa_time_to_sleep',
+                        ],
+                'notifiers': [notifiers['alexa_kitchen']],
+                # Used to join the friendly_name text into the same sentence
+                # to reduce API calls
+                'times_repeat': 4,
+                # Time to wait between API calls
+                'sleep_time': 6,
+                }
+
+# Used by arrival.py
+# Mapping of device trackers to notifiers that should get a notification
+# when the person arrives. The first element of the tuple value is the notification
+# service and the second element the message to send.
+arrival = {
+        'device_tracker.kate': {
+            'msg': 'Kate has arrived',
+            'notifiers': [notifiers['telegram_me']]
+            },
+}
+
+# Used by door_instant.py to define doors that will instantly product an "open/close"
+# notification
+door_instant = {
+        # Door
+        'cover.front_gate': {
+                # state that defines that the door is open. For some contact sensors
+                # this could be "on" or "off"
+                'open_state': 'open',
+                'open_msg': 'Front gate open',
+                'closed_state': 'closed',
+                'closed_msg': 'Front gate closed',
+                'notifiers': [notifiers['telegram_me']],
+                }
+        }
+
+# Used by dooropen_warning.py to regularly check if a door is opened or closed.
+# Typically you would use a time_constraint in app.yaml to define the hours where
+# this app is active
+dooropen_warning = {
+                # Interval between checks
+                'interval': 30 * 60,
+                'entities': {
+                        'cover.front_gate': {
+                                # See for door_instant above
+                                'open_state': 'open',
+                                'closed_state': 'closed',
+                                'msg': 'The front gate is open!'
+                                }
+                        },
+                'notifiers': [
+                        notifiers['alexa_kitchen'],
+                        notifiers['telegram_me'],
+                        ],
+                }
+
+# Used by going_out.py to configure stuff to do when enabling that automation
+going_out = {
+                # HAS input_boolean that enabled the automation
+                'boolean_activate': 'input_boolean.salimos',
+                # Doors to open when enabling the automation
+                'open_doors': [
+                        {
+                                'entity': 'cover.front_gate',
+                                # service used to open that entity
+                                'open_service': 'cover/open_cover'
+                                }
+                        ],
+                # Lights to turn on for five minutes. All other lights will be turned off
+                'lights_on': ['light.outside_starts'],
+                # Alarm to turn on after one minute
+                'boolean_alarm': 'input_boolean.door_alarm',
+                # Notifiers to call to say "bye"
+                'bye_notifiers': [notifiers['alexa_kitchen']],
+                # Bye message used by the notifiers above
+                'bye_msg': 'See you soon!',
+                }
+
+# Used to turn on night mode on yeelights at specific hours (I use this with bedside
+# lamps)
+yeelight_nightmode = {
+                'entities': ['light.child_lamp'],
+                'start_time': datetime.time(21, 00, 0),
+                'end_time': datetime.time(8, 30, 0),
+                # input boolean that enable or disable this automation
+                'boolean_activate': 'input_boolean.child_lamp_night_mode',
+                }
+
+# Used by rain_switcher.py that, when a leak sensor detect rains, will turn off
+# some outside switches to prevent short circuits
+rain_switcher = {
+                'rain_sensor': 'binary_sensor.rain',
+                'to_turnoff': [
+                        'switch.outside_stairs',
+                        ],
+                'notifiers': [
+                        notifiers['alexa_kitchen'],
+                        notifiers['telegram_me'],
+                        ],
+                'msg': 'Rain detected, cutting down power on external switches, remember ' +
+                       'to turn them on again later'
+                }
+
+# Used by leak_notify.py to notify about water leaks
+leak_notify = {
+                'leak_sensors': ['binary_sensor.sink_leak'],
+                # to avoid quick false positives, a second check will be made after
+                # these seconds before notifying
+                'recheck_timeout': 5,
+                'notifiers': [
+                        notifiers['alexa_kitchen'],
+                        notifiers['telegram_me'],
+                        ],
+                # {sensor} will be replaced by the actual sensor name
+                'msg': 'Warning, water leak detected on {sensor}',
+                }
+
+# Used by door_alarm.py which will use the configured notifiers when a door
+# is opened. Typically you would add a constraint on apps.yaml to enable this alarm
+# only sometimes (see the default apps.yaml file).
+door_alarm = {
+                'msg': '{type} {name} is opened!',
+                'notifiers': [
+                        notifiers['pushover_emergency'],
+                        ],
+                # list of door sensors
+                'sensors': {
+                        'binary_sensor.maindoor_contact': {
+                                'name': 'main door',
+                                # only used for the messages
+                                'type': 'door',
+                                # status the device uses for "open", typically off
+                                # for contact sensors of "open" for covers
+                                'open_status': 'off',
+                                # warn_nonholidays = False means warning will not be produced on
+                                # non holiday mode (to avoid alarms from the cancela when going back)
+                                'warn_nonholidays': True,
+                                },
+                        },
+                }
+
+# used by occupancy.py which handles the lights turned/on off for occupancy sensors
+occupancy = {
+                'log_msg': 'Motion detected on {zone}',
+                'sensors': {
+                        'binary_sensor.outside_stairs_occupancy': {
+                                # used only for messages
+                                'zone': 'outside_stairs',
+                                # HAS input_boolean used to enable or disable this sensor
+                                'enabling_boolean': 'input_boolean.outisde_stairs_occupancy',
+                                'light': 'light.outside_stairs',
+                                # defines if this is outside the house. Used by
+                                # occupancy_alarm below
+                                'is_outside': True,
+                                },
+                        }
+                }
+
+# Used by occupancy_alarm.py which will produce and alarm when an outside occupancy sensor
+# (as defined in occupancy['sensors'] above) detect movement. Typically you would add a
+# constraint in apps.yaml to enable this alarm only sometimes (see the default apps.yaml
+# file)
+occupancy_alarm = {
+                # {zone} will be replaced by the actual zone
+                'msg': 'ALERT: movement detected in {zone}',
+                'notifiers': [
+                        notifiers['pushover_emergency'],
+                        notifiers['telegram_me'],
+                        ],
+                }
+
+# used by remove_click.py which handles what happens when a remote button is clicked
+remote_clicked = {
+                # these are mappings of the stated used by different remotes to our
+                # standar actions (on, off, color_temp_fw/bw to move the color temperature
+                # and color_rgb_fw to change RGB color)
+                'remote_mappings': {
+                        'tradfri': {
+                                'toggle': 'toggle',
+                                'brightness_up_click': 'on',
+                                'brightness_down_click': 'off',
+                                'arrow_right_click': 'color_temp_fw',
+                                'arrow_left_click': 'color_temp_bw',
+                                },
+
+                        'philips': {
+                                'on-press': 'on',
+                                'off-press': 'off',
+                                'up-press': 'color_temp_fw',
+                                'down-press': 'color_temp_bw'
+                                },
+                        # you can add a different mapping for the same kind of remote
+                        'philips_child': {
+                                'on-press': 'on',
+                                'off-press': 'off',
+                                'up-press': 'color_white',
+                                'down-press': 'color_rgb_fw'
+                                },
+
+                        'aqara_wall': {
+                                'on': 'on',
+                                'off': 'off',
+                                },
+                        },
+                'remotes': {
+                        'sensor.office': {
+                                # light (or group or switch) that this remove manages
+                                'light': 'light.despacho',
+                                # button mappings that the remote use from the ones
+                                # defined above in 'remote_mappings'
+                                'buttons': 'tradfri'
+                                },
+                        'sensor.child': {
+                                'light': 'light.child',
+                                'buttons': 'philips_child'
+                                },
+                        },
+                }

@@ -1,24 +1,22 @@
-import threading
+from base_app import BaseApp
 
-from has_logging_app import HASLoggingApp
-
-from occupancy_sensors import sensors
+from local_config import occupancy as config
 
 
-class Occupancy(HASLoggingApp):
+class Occupancy(BaseApp):
     def initialize(self):
-        for sensor, data in sensors.items():
+        for sensor, data in config['sensors'].items():
             self.listen_state(self.motion, sensor)
 
     def motion(self, entity, attribute, old, new, kwargs):
         if new == 'off':
             return
 
-        sensor = sensors[entity]
+        sensor = config['sensors'][entity]
         # Check that this timer is not disabled by its enabling_boolean
         if self.get_state(sensor['enabling_boolean']) == 'off':
             return
 
-        self.log('Motion detected on {}'.format(sensor['zone']))
-        light = self.global_vars['lights'][sensor['light']]
+        self.log(config['log_msg'].format(**sensor))
+        light = self.get_app('lights').get_light(sensor['light'])
         light.occ_turn_on()
