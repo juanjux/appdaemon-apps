@@ -1,29 +1,25 @@
-from has_logging_app import HASLoggingApp
+from base_app import BaseApp
 
-from door_sensors import sensors
+from local_config import door_alarm as config
+from local_config import HOLIDAYS_MODE_BOOLEAN
 
 
-class DoorAlarm(HASLoggingApp):
-    """
-    Produce an alarm using pushover if a door is opened
-    """
+class DoorAlarm(BaseApp):
     def initialize(self):
-        for name, data in sensors.items():
+        for name, data in config['sensors'].items():
             self.listen_state(self.check_door, name, data=data)
 
+    def _issue_warning(self, type, name):
+        msg = config['msg'].format(type, name)
+        self.smart_notify(config['notifiers'], msg)
+
     def check_door(self, entity, attribute, old, new, kwargs):
-        if new == 'off' or new == old:
+        d = kwargs['data']
+        if new == old or new != d['open_status']:
             return
 
-        msg = '{type} {name} opened!'.format(**kwargs['data'])
+        if self.get_state(HOLIDAYS_MODE_BOOLEAN) == 'off' and\
+                not d['warn_nonholidays']:
+                    return
 
-        self.call_service('notify/pushover',
-                title='OPEN DOOR ALERT!',
-                message = msg,
-                data={
-                    'sound': 'persistent',
-                    'priority': 2,
-                    'retry': 30,
-                    'expire': 10800,
-                    'url': ''
-                    })
+        self._issue_warning(d['type'], d['name'])

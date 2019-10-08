@@ -1,12 +1,14 @@
-from has_logging_app import HASLoggingApp
+from base_app import BaseApp
 
 from occupancy_sensors import sensors
+from local_config import occupancy_alarm as config
 
 
-class OccupancyAlarm(HASLoggingApp):
+class OccupancyAlarm(BaseApp):
     """
-    Produce an alarm using pushover if the external occupancy
-    sensors detect movement
+    Send a notification if movement is detected on any of the outside
+    motion detectors. Use a constraint_input_boolean to enable or disable
+    it at will (e.g. when outside the house or in holidays mode).
     """
     def initialize(self):
         self.timer_handle = None
@@ -19,12 +21,5 @@ class OccupancyAlarm(HASLoggingApp):
         if new == 'off' or new == old:
             return
 
-        msg = 'Movement detected in {zone}'.format(**kwargs['data'])
-        self.call_service('notify/pushover',
-                title='MOVEMENT ALARM',
-                message = msg,
-                data={
-                    'sound': 'persistent',
-                    'priority': 1,
-                    'url': ''
-                    })
+        msg = config['msg'].format(**kwargs['data'])
+        self.smart_notify(config['notifiers'], msg)

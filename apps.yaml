@@ -1,12 +1,10 @@
 global_modules:
-  - remotes
-  - door_sensors
-  - occupancy_sensors
-  - light
-  - lights
+  - local_config
+  - base_app
+  - color_utils
 lights:
   module: lights
-  class: LightsInitializer
+  class: Lights
   dependency: light
 goto_sleep:
   module: goto_sleep
@@ -18,28 +16,47 @@ occupancy:
   dependency: lights
   constrain_start_time: sunset - 00:30:00
   constrain_end_time: sunrise + 00:30:00
+dooropen_warning:
+  module: dooropen_warning
+  class: DoorOpenWarning
+  constrain_start_time: "21:00:00"
+  constrain_end_time: "08:00:00"
+  constrain_input_boolean: input_boolean.frontgate_warning
+doorinstant:
+  module: doorinstant
+  class: DoorInstant
 remote_clicked:
   module: remote_clicked
   class: RemoteClicked
   dependency: lights
-nightmode_lamp:
-  module: nightmode_lamp
-  class: NightModeLamp
+yeelight_nightmode:
+  module: yeelight_nightmode
+  class: YeelightNightMode
 alexa_say:
   module: alexa_say
   class: AlexaSay
-notification_rain:
-  module: notification_rain
-  class: NotificationRain
-notification_fregadero:
-  module: notification_waterleak
-  class: NotificationWater
+alexa_repeat:
+  module: alexa_repeat
+  class: AlexaRepeat
+rain_switcher:
+  module: rain_switcher
+  class: RainSwitcher
+leak_notify:
+  module: leak_notify
+  class: LeakNotify
+arrival:
+  module: arrival
+  class: Arrival
 door_alarm:
   module: door_alarm
   class: DoorAlarm
-  constrain_input_boolean: input_boolean.door_alarms
+  constrain_input_boolean: input_boolean.doors_alarm
 occupancy_alarm:
   module: occupancy_alarm
   class: OccupancyAlarm
   dependency: occupancy
   constrain_input_boolean: input_boolean.outside_movement_alarm
+going_out:
+  module: going_out
+  class: GoingOut
+  dependency: lights

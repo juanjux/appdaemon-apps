@@ -1,27 +1,3 @@
-tradfri_buttons = {
-            'toggle': 'toggle',
-            'brightness_up_click': 'on',
-            'brightness_down_click': 'off',
-            'arrow_right_click': 'color_temp_fw',
-            'arrow_left_click': 'color_temp_bw',
-            }
-
-philips_buttons = {
-            'on-press': 'on',
-            'off-press': 'off',
-            'up-press': 'color_temp_fw',
-            'down-press': 'color_temp_bw'
-        }
-
-aqara_wall_buttons = {
-            'on': 'on',
-            'off': 'off',
-        }
-
-remotes = {
-        'sensor.some_remote': {'light': 'light.some_light', 'buttons': tradfri_buttons},
-}
-
 temperatures = [153, 326, 500]
 
 
