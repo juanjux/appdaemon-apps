@@ -1,6 +1,6 @@
 from base_app import BaseApp
-from occupancy_sensors import sensors as msensors
 from local_config import goto_sleep as config
+from local_config import occupancy
 
 
 class GotoSleep(BaseApp):
@@ -39,6 +39,6 @@ class GotoSleep(BaseApp):
         self.turn_off(config['boolean_activate'])
 
     def apply_motion_sensors(self, cb):
-        for data in msensors.values():
+        for data in occupancy['sensors'].values():
             if data['is_outside']:
                 cb(data['enabling_boolean'])
