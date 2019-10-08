@@ -1,7 +1,7 @@
 from base_app import BaseApp
 
-from occupancy_sensors import sensors
 from local_config import occupancy_alarm as config
+from local_config import occupancy
 
 
 class OccupancyAlarm(BaseApp):
@@ -13,7 +13,7 @@ class OccupancyAlarm(BaseApp):
     def initialize(self):
         self.timer_handle = None
 
-        for sensor, data in sensors.items():
+        for sensor, data in occupancy['sensors'].items():
             if data['is_outside']:
                 self.listen_state(self.motion, sensor, data=data)
 
