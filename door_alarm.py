@@ -9,10 +9,6 @@ class DoorAlarm(BaseApp):
         for name, data in config['sensors'].items():
             self.listen_state(self.check_door, name, data=data)
 
-    def _issue_warning(self, type, name):
-        msg = config['msg'].format(type, name)
-        self.smart_notify(config['notifiers'], msg)
-
     def check_door(self, entity, attribute, old, new, kwargs):
         d = kwargs['data']
         if new == old or new != d['open_status']:
@@ -22,4 +18,5 @@ class DoorAlarm(BaseApp):
                 not d['warn_nonholidays']:
                     return
 
-        self._issue_warning(d['type'], d['name'])
+        msg = config['msg'].format(**d)
+        self.smart_notify(config['notifiers'], msg)
