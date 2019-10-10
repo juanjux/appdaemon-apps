@@ -160,14 +160,21 @@ going_out = {
                                 'open_service': 'cover/open_cover'
                                 }
                         ],
-                # Lights to turn on for five minutes. All other lights will be turned off
-                'lights_on': ['light.outside_starts'],
+                # Lights to turn on for five minutes. When going outside.
+                # All other lights will be turned off
+                'out_lights_on': ['light.outside_stairs'],
+                # Timeout to turn off the lights in lights_on
+                'turned_on_lights_timeout': 5 * 60,
+                # Lights to turn on when returning
+                'back_lights_on': ['light.outside_stairs', 'light.entrance'],
                 # Alarm to turn on after one minute
                 'boolean_alarm': 'input_boolean.door_alarm',
                 # Notifiers to call to say "bye"
                 'bye_notifiers': [notifiers['alexa_kitchen']],
                 # Bye message used by the notifiers above
                 'bye_msg': 'See you soon!',
+                # When to turn on the door alarm after activation (so you can exit)
+                'turn_on_alarm_timeout': 30,
                 }
 
 # Used to turn on night mode on yeelights at specific hours (I use this with bedside

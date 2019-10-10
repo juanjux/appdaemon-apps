@@ -6,7 +6,9 @@ them in case those can be useful directly or as reference to others.
 All the configuration used by the apps is separated to the `local_config.py`
 file. A commented example is provided in the file `local_config.py.example`; 
 edit it and rename to the above should get you working once the requisites are
-completed.
+completed. I'm not using app arguments in `apps.yaml`, even if it's the 
+canonical way to do it, because some configurations are complex and I very
+much prefer Python syntax to YAML's.
 
 ## Requisites
 
