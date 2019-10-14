@@ -27,7 +27,7 @@ class RemoteClicked(BaseApp):
         self.has_log('Remote {}: {}'.format(entity, new))
 
         if new == 'toggle':
-            # Central button, toggle lights
+            # Toggle lights, checking the state before
             if light.state == 'on':
                 light.turn_off()
             else:

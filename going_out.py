@@ -52,7 +52,7 @@ class GoingOut(BaseApp):
                 self.call_service(to['open_service'], entity_id=to['entity'])
 
     def lights_off_cb(self, kwargs):
-        for lo in config['lights_on']:
+        for lo in config['out_lights_on']:
             self.turn_off(lo)
 
     def door_alarm_cb(self, kwargs):
