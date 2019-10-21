@@ -61,40 +61,42 @@ def color_distance(color1, color2):
     return distance
 
 
+def find_closest_idx(current_color):
+    closest_distance = None
+    closest_idx = None
+
+    for idx, color in enumerate(colors):
+        distance = color_distance(current_color, color)
+        if closest_distance is None or distance < closest_distance:
+            closest_distance = distance
+            closest_idx = idx
+
+    return closest_idx
+
+
 def find_next_closest(current_color):
     if current_color is None:
         return colors[0]
 
-    closest = None
-    next_ = None
-    store_next = False
-    break_next = False
-    closest_distance = None
-
-    for color in colors:
-        if store_next:
-            next_ = color
-            store_next = False
-
-        if break_next:
-            break
-
-        distance = color_distance(current_color, color)
-        if closest is None or distance < closest_distance:
-            next_ = None
-            closest_distance = distance
-            closest = color
-            store_next = True
-
-        if distance == 0:
-            break_next = True
-
-    if next_ is None:
-        # closest was the last one
+    idx = find_closest_idx(current_color)
+    if idx == len(colors) - 1:
         return colors[0]
+    return colors[idx + 1]
 
-    return next_
+
+def find_prev_closest(current_color):
+    if current_color is None:
+        return colors[-1]
+
+    idx = find_closest_idx(current_color)
+    if idx == 0:
+        return colors[-1]
+    return colors[idx - 1]
 
 
 def cycle_color_front(current_color):
     return find_next_closest(current_color)
+
+
+def cycle_color_back(current_color):
+    return find_prev_closest(current_color)

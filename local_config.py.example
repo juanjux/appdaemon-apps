@@ -294,6 +294,7 @@ remote_clicked = {
                         'philips_child': {
                                 'on-press': 'on',
                                 'off-press': 'off',
+                                # you can write any color name after 'color_':
                                 'up-press': 'color_white',
                                 'down-press': 'color_rgb_fw'
                                 },

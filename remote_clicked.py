@@ -56,11 +56,15 @@ class RemoteClicked(BaseApp):
                 return
             light.turn_on(color_temp=color_utils.cycle_temp_back(color_temp))
 
-        elif new == 'color_white':
-            light.turn_on(color_name='white')
+        elif new.startswith('color_'):
+            c = new.split('_')[1]
+            light.turn_on(color_name=c)
 
         elif new == 'color_rgb_fw':
             next_color = color_utils.cycle_color_front(light.last_nonwhite_color)
             light.turn_on(rgb_color=next_color)
+        elif new == 'color_rgb_bw':
+            prev_color = color_utils.cycle_color_back(light.last_nonwhite_color)
+            light.turn_on(rgb_color=prev_color)
         else:
             return
