@@ -37,9 +37,21 @@ class RemoteClicked(BaseApp):
             # Brightness up, turn_on
             light.turn_on()
 
+        elif new.startswith('on_specific_'):
+            # Turn on specific light
+            l = '_'.join(new.split('_')[2:])
+            sp = self.get_app('lights').get_light(l)
+            sp.turn_on()
+
         elif new == 'off':
             # Brightness down, turn_off
             light.turn_off()
+
+        elif new.startswith('off_specific_'):
+            # Turn off specific light
+            l = '_'.join(new.split('_')[2:])
+            sp = self.get_app('lights').get_light(l)
+            sp.turn_off()
 
         elif new == 'color_temp_fw':
             color_temp = light.attribute('color_temp')

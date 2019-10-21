@@ -291,14 +291,15 @@ remote_clicked = {
                                 'down-press': 'color_temp_bw'
                                 },
                         # you can add a different mapping for the same kind of remote
-                        'philips_child': {
-                                'on-press': 'on',
-                                'off-press': 'off',
-                                # you can write any color name after 'color_':
-                                'up-press': 'color_white',
-                                'down-press': 'color_rgb_fw'
+                        'tradfri_child': {
+                                'toggle': 'toggle',
+                                # you can specify any COLOR after "color_[COLOR]"
+                                'brightness_up_click': 'color_white',
+                                # on/off_specific_[LIGHT] for mapping buttons to specific lights
+                                'brightness_down_click': 'on_specific_light.night_light',
+                                'arrow_right_click': 'color_rgb_fw',
+                                'arrow_left_click': 'color_rgb_bw',
                                 },
-
                         'aqara_wall': {
                                 'on': 'on',
                                 'off': 'off',
