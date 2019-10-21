@@ -53,7 +53,7 @@ class RemoteClicked(BaseApp):
             sp = self.get_app('lights').get_light(l)
             sp.turn_off()
 
-        elif new == 'color_temp_fw':
+        elif new == 'temp_fw':
             color_temp = light.attribute('color_temp')
             if color_temp is None:
                 # chaeapo bulb
@@ -61,7 +61,7 @@ class RemoteClicked(BaseApp):
 
             light.turn_on(color_temp=color_utils.cycle_temp_front(color_temp))
 
-        elif new == 'color_temp_bw':
+        elif new == 'temp_bw':
             color_temp = light.attribute('color_temp')
             if color_temp is None:
                 # chaeapo bulb
@@ -72,10 +72,10 @@ class RemoteClicked(BaseApp):
             c = new.split('_')[1]
             light.turn_on(color_name=c)
 
-        elif new == 'color_rgb_fw':
+        elif new == 'rgb_fw':
             next_color = color_utils.cycle_color_front(light.last_nonwhite_color)
             light.turn_on(rgb_color=next_color)
-        elif new == 'color_rgb_bw':
+        elif new == 'rgb_bw':
             prev_color = color_utils.cycle_color_back(light.last_nonwhite_color)
             light.turn_on(rgb_color=prev_color)
         else:

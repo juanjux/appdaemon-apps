@@ -273,22 +273,22 @@ occupancy_alarm = {
 # used by remove_click.py which handles what happens when a remote button is clicked
 remote_clicked = {
                 # these are mappings of the stated used by different remotes to our
-                # standar actions (on, off, color_temp_fw/bw to move the color temperature
-                # and color_rgb_fw to change RGB color)
+                # standar actions (on, off, temp_fw/bw to move the color temperature
+                # and rgb_fw to change RGB color)
                 'remote_mappings': {
                         'tradfri': {
                                 'toggle': 'toggle',
                                 'brightness_up_click': 'on',
                                 'brightness_down_click': 'off',
-                                'arrow_right_click': 'color_temp_fw',
-                                'arrow_left_click': 'color_temp_bw',
+                                'arrow_right_click': 'temp_fw',
+                                'arrow_left_click': 'temp_bw',
                                 },
 
                         'philips': {
                                 'on-press': 'on',
                                 'off-press': 'off',
-                                'up-press': 'color_temp_fw',
-                                'down-press': 'color_temp_bw'
+                                'up-press': 'temp_fw',
+                                'down-press': 'temp_bw'
                                 },
                         # you can add a different mapping for the same kind of remote
                         'tradfri_child': {
@@ -297,8 +297,10 @@ remote_clicked = {
                                 'brightness_up_click': 'color_white',
                                 # on/off_specific_[LIGHT] for mapping buttons to specific lights
                                 'brightness_down_click': 'on_specific_light.night_light',
-                                'arrow_right_click': 'color_rgb_fw',
-                                'arrow_left_click': 'color_rgb_bw',
+                                # Change color, defined colors are at color_utils.py
+                                # TODO: move the definitions to this confic
+                                'arrow_right_click': 'rgb_fw',
+                                'arrow_left_click': 'rgb_bw',
                                 },
                         'aqara_wall': {
                                 'on': 'on',
