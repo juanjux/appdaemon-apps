@@ -295,6 +295,8 @@ remote_clicked = {
                                 'toggle': 'toggle',
                                 # you can specify any COLOR after "color_[COLOR]"
                                 'brightness_up_click': 'color_white',
+                                # or temperature in mireds with "temp_mireds_[VALUE]:
+                                #'brightness_up_click': 'temp_mireds_153',
                                 # on/off_specific_[LIGHT] for mapping buttons to specific lights
                                 'brightness_down_click': 'on_specific_light.night_light',
                                 # Change color, defined colors are at color_utils.py

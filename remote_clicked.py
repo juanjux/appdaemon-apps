@@ -70,13 +70,19 @@ class RemoteClicked(BaseApp):
 
         elif new.startswith('color_'):
             c = new.split('_')[1]
-            light.turn_on(color_name=c)
+            light.turn_on(color_name=c, brightness_pct=100)
+
+        elif new.startswith('temp_mireds_'):
+            c = new.split('_')[2]
+            light.turn_on(color_temp=c)
 
         elif new == 'rgb_fw':
             next_color = color_utils.cycle_color_front(light.last_nonwhite_color)
             light.turn_on(rgb_color=next_color)
+
         elif new == 'rgb_bw':
             prev_color = color_utils.cycle_color_back(light.last_nonwhite_color)
             light.turn_on(rgb_color=prev_color)
+
         else:
             return
