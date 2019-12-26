@@ -311,7 +311,7 @@ remote_clicked = {
                         },
                 'remotes': {
                         'sensor.office': {
-                                # light (or group or switch) that this remove manages
+                                # light (or group or switch) that this remote manages
                                 'light': 'light.despacho',
                                 # button mappings that the remote use from the ones
                                 # defined above in 'remote_mappings'
@@ -321,5 +321,18 @@ remote_clicked = {
                                 'light': 'light.child',
                                 'buttons': 'philips_child'
                                 },
+                        'switch.kitchen': {
+                                'buttons': 'aqara_wall',
+                                # Linked lights will be turn on but if they sent a signal
+                                # in the next 2 seconds it'll be ignored. This is used to avoid
+                                # infinite turn_on/off loops on switches that would send a
+                                # "signal" even when turned on programatically like Xiaomi 
+                                # Aqara wall switches. See the comment on remote_clicked.py
+                                # for more info.
+                                'linked': [
+                                        'switch.kitchen_ceiling',
+                                        'switch.kitchen_wall',
+                                        ],
+                        },
                         },
                 }

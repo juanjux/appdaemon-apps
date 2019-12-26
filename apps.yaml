@@ -25,6 +25,9 @@ dooropen_warning:
 doorinstant:
   module: doorinstant
   class: DoorInstant
+gate_lights:
+  module: gate_lights
+  class: GateLights
 remote_clicked:
   module: remote_clicked
   class: RemoteClicked
