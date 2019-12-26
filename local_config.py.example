@@ -336,3 +336,16 @@ remote_clicked = {
                         },
                         },
                 }
+
+# The gate_lights app turn on lights when some door or cover is opened and
+# turn them off automatically after some time
+gate_lights = {
+      'gates': {
+            'cover.cancela': {
+                  'name': 'cancela',
+                  'open_status': 'open',
+                  },
+            },
+      'lights': ['light.luces_cancela'],
+      'lights_timeout': 180,
+}
