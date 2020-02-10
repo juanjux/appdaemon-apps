@@ -13,11 +13,11 @@ class GateLights(BaseApp):
         if new == old or new != d['open_status']:
             return
 
-        for l in config['lights']:
+        for l in config['gates'][entity]['lights']:
             self.turn_on(l)
 
-        self.run_in(self.lights_off_cb, config['lights_timeout'])
+        self.run_in(self.lights_off_cb, config['lights_timeout'], entity=entity)
 
     def lights_off_cb(self, kwargs):
-        for l in config['lights']:
+        for l in config['gates'][kwargs['entity']]['lights']:
             self.turn_off(l)
