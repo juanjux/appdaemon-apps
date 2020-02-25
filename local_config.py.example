@@ -349,3 +349,36 @@ gate_lights = {
       'lights': ['light.luces_cancela'],
       'lights_timeout': 180,
 }
+
+watering = {
+            # MQTT topic of the Tasmota controllers
+            'zone_controllers': {
+                  'zone1': 'sonoff_watering1',
+                  'zone2': 'sonoff_watering2',
+                  'zone3': 'sonoff_watering3',
+                  },
+            # HAS input booleans that enable or disable each zone
+            'zone_enablers': {
+                  'zona1': 'input_boolean.watering1_enabled',
+                  'zona2': 'input_boolean.watering2_enabled',
+                  'zona3': 'input_boolean.watering3_enabled',
+                  },
+            # Input text for the input of the duration of watering, in minutes
+            'watering_duration_input': 'input_text.watering_minutes',
+            # Datetime inputs for the time of watering start of each zone
+            'start_time_inputs': {
+                  'zona1': 'input_datetime.watering1',
+                  'zona2': 'input_datetime.watering2',
+                  'zona3': 'input_datetime.watering3',
+                  },
+            # Input booleans that enable or disable each week day
+            'weekday_enablers': {
+                  'sunday': 'input_boolean.watering_days_sunday',
+                  'monday': 'input_boolean.watering_days_monday',
+                  'tuesday': 'input_boolean.watering_days_tuesday',
+                  'wednesday': 'input_boolean.watering_days_wednesday',
+                  'thursday': 'input_boolean.watering_days_thursday',
+                  'friday': 'input_boolean.watering_days_friday',
+                  'saturday': 'input_boolean.watering_days_saturday',
+                  },
+}
