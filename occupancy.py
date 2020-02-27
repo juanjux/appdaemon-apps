@@ -18,5 +18,6 @@ class Occupancy(BaseApp):
             return
 
         self.log(config['log_msg'].format(**sensor))
-        light = self.get_app('lights').get_light(sensor['light'])
-        light.occ_turn_on()
+        for light in sensor['lights']:
+            light = self.get_app('lights').get_light(light)
+            light.occ_turn_on()

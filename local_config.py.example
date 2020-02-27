@@ -249,7 +249,8 @@ occupancy = {
                                 'zone': 'outside_stairs',
                                 # HAS input_boolean used to enable or disable this sensor
                                 'enabling_boolean': 'input_boolean.outisde_stairs_occupancy',
-                                'light': 'light.outside_stairs',
+                                # Lights to turn on and then off
+                                'lights': ['light.outside_stairs'],
                                 # defines if this is outside the house. Used by
                                 # occupancy_alarm below
                                 'is_outside': True,

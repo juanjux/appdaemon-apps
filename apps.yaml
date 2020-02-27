@@ -28,8 +28,8 @@ doorinstant:
 gate_lights:
   module: gate_lights
   class: GateLights
-  constrain_start_time: sunset - 00:30:00
-  constrain_end_time: sunrise + 00:30:00
+  #constrain_start_time: sunset - 00:30:00
+  #constrain_end_time: sunrise + 00:30:00
 remote_clicked:
   module: remote_clicked
   class: RemoteClicked
