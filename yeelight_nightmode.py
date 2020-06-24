@@ -6,10 +6,7 @@ from local_config import yeelight_nightmode as config
 
 class YeelightNightMode(BaseApp):
     def initialize(self):
-        # TODO: configure in the UI
-        if self.get_state(config['boolean_activate']) == 'on':
-            self.start_timers()
-        self.listen_state(self.clicked, config['boolean_activate'])
+        self.start_timers()
 
     def clicked(self, entity, attribute, old, new, kwargs):
         self.cancel_timers()

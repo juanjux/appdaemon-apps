@@ -8,6 +8,7 @@ class RemoteClicked(BaseApp):
     def initialize(self):
         for remote in config['remotes']:
             self.listen_state(self.clicked, remote)
+
         # Used to ignore the next "on" signal for linked lights. This is needed because
         # some switch "A" that also turn on other switch "B" could enter into a loop once
         # "B" sends its "on" signal if that's processed here and has "A" as a linked
@@ -16,13 +17,16 @@ class RemoteClicked(BaseApp):
         # be ignored and removed from "ignore_linkedsignal". Also, things in this list will
         # be removed by a timer 2 seconds after being added to avoid a possible problem
         # caused by "B" "on" signal not arriving and the next (correct, manually issued)
-        # "on" signal from B being ignored.
+        # "on" signal from B being ignored. What is stored is entity__state, e.g.:
+        # light.kitchen__on (the state is also stored so in a turn on followed by a quick
+        # turn off the later is not ignored).
         self.ignore_linkedsignal = set()
 
     def clicked(self, entity, attribute, old, new, kwargs):
-        if entity in self.ignore_linkedsignal:
+        linkedstr = '%s__%s' % (entity, new)
+        if linkedstr in self.ignore_linkedsignal:
             try:
-                self.ignore_linkedsignal.remove(entity)
+                self.ignore_linkedsignal.remove(linkedstr)
             except KeyError:
                 # Probably removed right now by the callback
                 pass
@@ -43,17 +47,17 @@ class RemoteClicked(BaseApp):
 
         # See above about treatment of "linked" vs normal "light"
         if 'linked' in r:
-            lights = r['linked']
-            linked = True
-        else:
-            lights = [r['light']]
-            linked = False
+            # Add ourselves too so the virtual light/group/switch toggling
+            # the group doesnt toggle this device too
+            r['linked'].append(entity)
 
-        for l in lights:
-            if linked:
-                self.ignore_linkedsignal.add(l)
-                self.run_in(self.linked_remove_cb, 2, light=l)
+            for l in r['linked']:
+                linkedstr = '%s__%s' % (l, new)
+                self.ignore_linkedsignal.add(linkedstr)
+                self.run_in(self.linked_remove_cb, 2, light=linkedstr)
 
+        # In the future this will support more than one light, thus the list and loop
+        for l in [r['light']]:
             light = self.get_app('lights').get_light(l)
             new = buttons[new]
             self.has_log('Remote {}: {}'.format(entity, new))

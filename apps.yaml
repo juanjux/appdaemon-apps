@@ -14,8 +14,8 @@ occupancy:
   module: occupancy
   class: Occupancy
   dependency: lights
-  constrain_start_time: sunset - 00:30:00
-  constrain_end_time: sunrise + 00:30:00
+  constrain_start_time: sunset - 00:15:00
+  constrain_end_time: sunrise + 00:15:00
 dooropen_warning:
   module: dooropen_warning
   class: DoorOpenWarning
@@ -28,8 +28,8 @@ doorinstant:
 gate_lights:
   module: gate_lights
   class: GateLights
-  #constrain_start_time: sunset - 00:30:00
-  #constrain_end_time: sunrise + 00:30:00
+  constrain_start_time: sunset - 00:15:00
+  constrain_end_time: sunrise + 00:15:00
 remote_clicked:
   module: remote_clicked
   class: RemoteClicked
@@ -37,15 +37,21 @@ remote_clicked:
 yeelight_nightmode:
   module: yeelight_nightmode
   class: YeelightNightMode
+  constrain_input_boolean: input_boolean.lampara_adri_modo_noche
+caldera_apagar_noche:
+  module: caldera_apagar_noche
+  class: CalderaApagarNoche
+  constrain_input_boolean: input_boolean.caldera_apagar_noche
 alexa_say:
   module: alexa_say
   class: AlexaSay
 alexa_repeat:
   module: alexa_repeat
   class: AlexaRepeat
-rain_switcher:
-  module: rain_switcher
-  class: RainSwitcher
+# Disabled for now
+#rain_switcher:
+  #module: rain_switcher
+  #class: RainSwitcher
 leak_notify:
   module: leak_notify
   class: LeakNotify
