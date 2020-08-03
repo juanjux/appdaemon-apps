@@ -82,3 +82,9 @@ scene_moviemode_salon:
 watering:
   module: watering
   class: Watering
+foco_piscina:
+  module: foco_piscina
+  class: FocoPiscina
+arregla_modo_disco:
+  module: arregla_modo_disco
+  class: ArreglaModoDisco

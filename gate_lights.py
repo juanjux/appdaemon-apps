@@ -14,11 +14,11 @@ class GateLights(BaseApp):
             return
 
         for l in config['gates'][entity]['lights']:
-            self.turn_on(l)
+            st = self.get_state(l)
+            if st != 'on':
+                self.turn_on(l)
+                self.run_in(self.light_off_cb, config['gates'][entity]['lights_timeout'],
+                            light=l)
 
-        self.run_in(self.lights_off_cb,
-                config['gates'][entity]['lights_timeout'], entity=entity)
-
-    def lights_off_cb(self, kwargs):
-        for l in config['gates'][kwargs['entity']]['lights']:
-            self.turn_off(l)
+    def light_off_cb(self, kwargs):
+        self.turn_off(kwargs['light'])
